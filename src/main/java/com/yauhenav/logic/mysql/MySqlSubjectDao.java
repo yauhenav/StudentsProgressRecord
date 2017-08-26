@@ -49,6 +49,8 @@ public class MySqlSubjectDao implements SubjectDao {
     // Return a list of objects corresponding to all DB entries
     @Override
     public List<Subject> getAll() throws DaoException {
-        return null;
+        Query query = session.createQuery("from Subject sub");
+        List<Subject> lst = query.list();
+        return lst;
     }
 }

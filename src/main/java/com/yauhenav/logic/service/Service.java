@@ -14,8 +14,6 @@ public class Service {
     private SubjectDao interDaoSub = null;
     private MarkDao interDaoMar = null;
 
-    //private String selectDataBase = "/daotrain.properties";
-
     // Constructor that establishes connection with the DB & creates required objects
     public Service() throws ServiceException {
         try {
@@ -36,7 +34,6 @@ public class Service {
             throw new ServiceException("Exception in Service class", exc);
         }
     }
-
 
     //Retrieve all 'Student' DTO's from the DB
     public List<Student> displayAllStudents() throws ServiceException {

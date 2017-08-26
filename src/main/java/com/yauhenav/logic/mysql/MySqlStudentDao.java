@@ -1,12 +1,7 @@
 package com.yauhenav.logic.mysql;
 
 import java.util.*;
-
-import com.yauhenav.logic.service.SessionUtil;
-import org.hibernate.Session;
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 
 import com.yauhenav.logic.dao.*;
 import com.yauhenav.logic.dto.*;
@@ -26,47 +21,75 @@ public class MySqlStudentDao implements StudentDao {
     // Create a new DB entry as per corresponding received object
     @Override
     public void create(Student student) throws DaoException {
-        Transaction tx = session.beginTransaction();
-        session.save (student);
-        tx.commit();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.save(student);
+            tx.commit();
+        } catch (HibernateException exc) {
+            tx.rollback();
+            throw new DaoException("Exception in MySqlStudentDao object", exc);
+        }
     }
 
     // Return the object corresponding to the DB entry with received primary 'key'
     @Override
     public Student read(Student student) throws DaoException {
-        Query<Student> query = session.createQuery("from Student s where s.id=:id", Student.class);
-        query.setParameter ("id", student.getId());
-        return query.uniqueResult();
+        try {
+            Query<Student> query = session.createQuery("from Student s where s.id=:id", Student.class);
+            query.setParameter("id", student.getId());
+            return query.uniqueResult();
+        } catch (HibernateException exc) {
+            throw new DaoException("Exception in MySqlStudentDao object", exc);
+        }
     }
 
     // Modify the DB entry as per corresponding received object
     @Override
     public void update(Student student) throws DaoException {
-        Transaction tx = session.beginTransaction();
-        Query<Student> query = session.createQuery("from Student s where s.id=:id", Student.class);
-        query.setParameter("id", student.getId());
-        Student tempStud = query.uniqueResult();
-        tempStud.setId (student.getId());
-        tempStud.setName(student.getName());
-        tempStud.setSurname(student.getSurname());
-        tx.commit();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Query<Student> query = session.createQuery("from Student s where s.id=:id", Student.class);
+            query.setParameter("id", student.getId());
+            Student tempStud = query.uniqueResult();
+            tempStud.setId(student.getId());
+            tempStud.setName(student.getName());
+            tempStud.setSurname(student.getSurname());
+            tx.commit();
+        }catch (HibernateException exc) {
+            tx.rollback();
+            throw new DaoException("Exception in MySqlStudentDao object", exc);
+        }
     }
 
     // Remove the DB entry as per corresponding received object
     @Override
     public void delete(Student student) throws DaoException {
-        Transaction tx = session.beginTransaction();
-        session.delete(student);
-        tx.commit();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            session.delete(student);
+            tx.commit();
+        } catch (HibernateException exc) {
+            if (tx!=null) {
+                tx.rollback();
+            }
+            session.close();
+            throw new DaoException("Exception in MySqlStudentDao object", exc);
+        }
     }
 
     // Return a list of objects corresponding to all DB entries
     @Override
     public List<Student> getAll() throws DaoException {
-
-        Query query = session.createQuery("from Student s");
-        List<Student> lst = query.list();
-        return lst;
+        try {
+            Query query = session.createQuery("from Student s");
+            List<Student> lst = query.list();
+            return lst;
+        } catch (HibernateException exc) {
+            throw new DaoException("Exception in MySqlStudentDao object", exc);
+        }
     }
 }
 
