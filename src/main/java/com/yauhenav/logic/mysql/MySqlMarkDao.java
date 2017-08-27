@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
 
+import org.hibernate.SessionFactory;
 import org.hibernate.Session;
 import org.hibernate.Query;
 import org.hibernate.Transaction;
@@ -14,11 +15,11 @@ import com.yauhenav.logic.dto.*;
 import com.yauhenav.logic.exception.*;
 
 public class MySqlMarkDao implements MarkDao {
-    Session session = null;
+    private SessionFactory factory = null;
 
     // Constructor
-    public MySqlMarkDao(Session session) throws DaoException {
-        this.session = session;
+    public MySqlMarkDao(SessionFactory factory) throws DaoException {
+        this.factory = factory;
     }
 
     // Create a new DB entry as per corresponding received object

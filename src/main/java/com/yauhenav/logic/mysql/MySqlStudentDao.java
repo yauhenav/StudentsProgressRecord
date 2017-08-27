@@ -33,28 +33,43 @@ public class MySqlStudentDao implements StudentDao {
         } catch (HibernateException exc) {
             try {
                 tx.rollback();
-            } catch ()
+            } catch (NullPointerException npe) {
+                System.err.println ("Couldn't roll back transaction");
+                npe.printStackTrace();
+            }
             throw new DaoException("Exception in MySqlStudentDao object", exc);
+        } finally {
+            if (session!=null) {
+                session.close();
+            }
         }
     }
 
     // Return the object corresponding to the DB entry with received primary 'key'
     @Override
     public Student read(Student student) throws DaoException {
+        Session session = null;
         try {
+            session = factory.openSession();
             Query<Student> query = session.createQuery("from Student s where s.id=:id", Student.class);
             query.setParameter("id", student.getId());
             return query.uniqueResult();
         } catch (HibernateException exc) {
             throw new DaoException("Exception in MySqlStudentDao object", exc);
+        } finally {
+            if (session!=null) {
+                session.close();
+            }
         }
     }
 
     // Modify the DB entry as per corresponding received object
     @Override
     public void update(Student student) throws DaoException {
+        Session session = null;
         Transaction tx = null;
         try {
+            session = factory.openSession();
             tx = session.beginTransaction();
             Query<Student> query = session.createQuery("from Student s where s.id=:id", Student.class);
             query.setParameter("id", student.getId());
@@ -63,38 +78,61 @@ public class MySqlStudentDao implements StudentDao {
             tempStud.setName(student.getName());
             tempStud.setSurname(student.getSurname());
             tx.commit();
-        }catch (HibernateException exc) {
-            tx.rollback();
+        } catch (HibernateException exc) {
+            try {
+                tx.rollback();
+            } catch (NullPointerException npe) {
+                System.err.println ("Couldn't roll back transaction");
+                npe.printStackTrace();
+            }
             throw new DaoException("Exception in MySqlStudentDao object", exc);
+        } finally {
+            if (session!=null) {
+                session.close();
+            }
         }
     }
 
     // Remove the DB entry as per corresponding received object
     @Override
     public void delete(Student student) throws DaoException {
+        Session session = null;
         Transaction tx = null;
         try {
+            session = factory.openSession();
             tx = session.beginTransaction();
             session.delete(student);
             tx.commit();
         } catch (HibernateException exc) {
-            if (tx!=null) {
+            try {
                 tx.rollback();
+            } catch (NullPointerException npe) {
+                System.err.println ("Couldn't roll back transaction");
+                npe.printStackTrace();
             }
-            session.close();
             throw new DaoException("Exception in MySqlStudentDao object", exc);
+        } finally {
+            if (session!=null) {
+                session.close();
+            }
         }
     }
 
     // Return a list of objects corresponding to all DB entries
     @Override
     public List<Student> getAll() throws DaoException {
+        Session session = null;
         try {
+            session = factory.openSession();
             Query query = session.createQuery("from Student s");
             List<Student> lst = query.list();
             return lst;
         } catch (HibernateException exc) {
             throw new DaoException("Exception in MySqlStudentDao object", exc);
+        } finally {
+            if (session!=null) {
+                session.close();
+            }
         }
     }
 }

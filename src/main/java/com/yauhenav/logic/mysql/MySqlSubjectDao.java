@@ -5,9 +5,7 @@ import java.io.InputStream;
 import java.sql.*;
 import java.util.*;
 
-import org.hibernate.Session;
-import org.hibernate.Query;
-import org.hibernate.Transaction;
+import org.hibernate.*;
 
 import com.yauhenav.logic.dao.*;
 import com.yauhenav.logic.dto.*;
@@ -15,11 +13,11 @@ import com.yauhenav.logic.exception.*;
 
 public class MySqlSubjectDao implements SubjectDao {
 
-    Session session = null;
+    private SessionFactory factory = null;
 
     // Constructor
-    public MySqlSubjectDao(Session session) throws DaoException {
-        this.session = session;
+    public MySqlSubjectDao(SessionFactory factory) throws DaoException {
+        this.factory = factory;
     }
 
     // Create a new DB entry as per corresponding received object
@@ -49,8 +47,18 @@ public class MySqlSubjectDao implements SubjectDao {
     // Return a list of objects corresponding to all DB entries
     @Override
     public List<Subject> getAll() throws DaoException {
-        Query query = session.createQuery("from Subject sub");
-        List<Subject> lst = query.list();
-        return lst;
+        Session session = null;
+        try {
+            session = factory.openSession();
+            Query query = session.createQuery("from Subject sub");
+            List<Subject> lst = query.list();
+            return lst;
+        } catch (HibernateException exc) {
+            throw new DaoException("Exception in MySqlSubjectDao object", exc);
+        } finally {
+            if (session!=null) {
+                session.close();
+            }
+        }
     }
 }

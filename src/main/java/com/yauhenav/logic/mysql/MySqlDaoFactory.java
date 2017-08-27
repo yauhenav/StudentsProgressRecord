@@ -36,27 +36,14 @@ public class MySqlDaoFactory implements DaoFactory {
     // Terminate the Session instance object
     @Override
     public void close() throws DaoException {
-        try {
-            if (session != null) {
-                try {
-                    session.close();
-                } catch (HibernateException exc) {
-                    throw new DaoException("Exception in MySqlDaoFactory", exc);
-                }
+        if (factory != null) {
+            try {
+                factory.close();
+            } catch (HibernateException exc) {
+                throw new DaoException("Exception in MySqlDaoFactory", exc);
             }
-            else{
-                System.err.println("Session object was not created");
-            }
-        } finally {
-            if (factory != null) {
-                try {
-                    factory.close();
-                } catch (HibernateException exc) {
-                    throw new DaoException("Exception in MySqlDaoFactory", exc);
-                }
-            } else {
-                System.err.println("SessionFactory object was not created");
-            }
+        } else {
+            System.err.println("SessionFactory object was not created");
         }
     }
 }
