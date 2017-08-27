@@ -8,29 +8,29 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class MySqlDaoFactory implements DaoFactory {
-    private Session session;
+
     private SessionFactory factory;
 
     // Constructor
     public MySqlDaoFactory() {
 
         factory = SessionUtil.getSessionFactory();
-        this.session = factory.openSession();
+
     }
 
     @Override
     public StudentDao getStudentDao() throws DaoException {
-        return new MySqlStudentDao(session);
+        return new MySqlStudentDao(factory);
     }
 
     @Override
     public SubjectDao getSubjectDao() throws DaoException {
-        return new MySqlSubjectDao(session);
+        return new MySqlSubjectDao(factory);
     }
 
     @Override
     public MarkDao getMarkDao() throws DaoException {
-        return new MySqlMarkDao(session);
+        return new MySqlMarkDao(factory);
     }
 
     // Terminate the Session instance object

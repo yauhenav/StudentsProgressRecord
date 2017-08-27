@@ -2,6 +2,8 @@ package com.yauhenav.logic.mysql;
 
 import java.util.*;
 import org.hibernate.*;
+import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 
 import com.yauhenav.logic.dao.*;
 import com.yauhenav.logic.dto.*;
@@ -11,23 +13,27 @@ import com.yauhenav.logic.exception.*;
 
 public class MySqlStudentDao implements StudentDao {
 
-    private Session session;
+    private SessionFactory factory;
 
     // Constructor
-    public MySqlStudentDao(Session session) {
-        this.session = session;
+    public MySqlStudentDao(SessionFactory factory) {
+        this.factory = factory;
     }
 
     // Create a new DB entry as per corresponding received object
     @Override
     public void create(Student student) throws DaoException {
+        Session session = null;
         Transaction tx = null;
         try {
+            session = factory.openSession();
             tx = session.beginTransaction();
             session.save(student);
             tx.commit();
         } catch (HibernateException exc) {
-            tx.rollback();
+            try {
+                tx.rollback();
+            } catch ()
             throw new DaoException("Exception in MySqlStudentDao object", exc);
         }
     }
