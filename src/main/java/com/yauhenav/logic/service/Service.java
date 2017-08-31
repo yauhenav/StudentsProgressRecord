@@ -6,6 +6,7 @@ import com.yauhenav.logic.dao.*;
 import com.yauhenav.logic.dto.*;
 import com.yauhenav.logic.exception.*;
 import com.yauhenav.logic.mysql.*;
+import org.hibernate.SessionFactory;
 
 public class Service {
 
@@ -14,10 +15,12 @@ public class Service {
     private SubjectDao interDaoSub = null;
     private MarkDao interDaoMar = null;
 
+
     // Constructor that establishes connection with the DB & creates required objects
     public Service() throws ServiceException {
         try {
-            interDaoFact = new MySqlDaoFactory ();
+            SessionFactory factory = SessionUtilProd.getSessionFactory();
+            interDaoFact = new MySqlDaoFactory (factory);
             interDaoStud = interDaoFact.getStudentDao();
             interDaoSub = interDaoFact.getSubjectDao();
             interDaoMar = interDaoFact.getMarkDao();

@@ -2,7 +2,7 @@ package com.yauhenav.logic.mysql;
 
 import com.yauhenav.logic.dao.*;
 import com.yauhenav.logic.exception.*;
-import com.yauhenav.logic.service.SessionUtil;
+import com.yauhenav.logic.service.SessionUtilProd;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,10 +12,8 @@ public class MySqlDaoFactory implements DaoFactory {
     private SessionFactory factory;
 
     // Constructor
-    public MySqlDaoFactory() {
-
-        factory = SessionUtil.getSessionFactory();
-
+    public MySqlDaoFactory(SessionFactory factory) {
+        this.factory = factory;
     }
 
     @Override
