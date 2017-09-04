@@ -51,6 +51,8 @@ public class Mark {
         this.value = value;
     }
 
+    @Basic
+    @Column(name = "STUDENT_ID")
     public int getStudentId() {
         return studentId;
     }
@@ -58,6 +60,8 @@ public class Mark {
         this.studentId = studentId;
     }
 
+    @Basic
+    @Column(name = "SUBJECT_ID")
     public int getSubjectId() {
         return subjectId;
     }

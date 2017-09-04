@@ -24,5 +24,4 @@ public interface MarkDao {
 
     // Return a list of Marks of one Student as per received primary 'key'
     List<Mark> getAllMarkOneStud (Mark mark) throws DaoException;
-
 }
