@@ -8,7 +8,10 @@
 <h1>Students Progress Record</h1>
 <table>
     <tr>
-        <td><a href="show-one-student-form.jsp">Show one specified student</a></td>
+        <td><a href="show-one-student-form.jsp">Show one student by specifying ID</a></td>
+    </tr>
+    <tr>
+        <td><a href="show-one-studentBySurname-form.jsp">Show one student with specified surname</a></td>
     </tr>
     <tr>
         <td><a href="show-all-students-form.jsp">Show all students</a></td>

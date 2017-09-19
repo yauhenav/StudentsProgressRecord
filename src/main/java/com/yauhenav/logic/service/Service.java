@@ -8,6 +8,8 @@ import com.yauhenav.logic.exception.*;
 import com.yauhenav.logic.mysql.*;
 import org.hibernate.SessionFactory;
 
+import javax.servlet.ServletException;
+
 public class Service {
 
     private DaoFactory interDaoFact = null;
@@ -33,6 +35,15 @@ public class Service {
     public Student displayOneStudent (Student student) throws ServiceException {
         try {
             return interDaoStud.read(student);
+        } catch (DaoException exc) {
+            throw new ServiceException("Exception in Service class", exc);
+        }
+    }
+
+    // Retrieve one 'Student' DTO from the DB as per received Surname
+    public Student displayOneStudentBySurname (Student student) throws ServiceException {
+        try {
+            return interDaoStud.readBySurname(student);
         } catch (DaoException exc) {
             throw new ServiceException("Exception in Service class", exc);
         }

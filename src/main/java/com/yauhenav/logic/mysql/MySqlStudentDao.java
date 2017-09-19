@@ -63,6 +63,24 @@ public class MySqlStudentDao implements StudentDao {
         }
     }
 
+    // Return the object corresponding to the DB entry with received 'Surname' parameter
+    @Override
+    public Student readBySurname(Student student) throws DaoException {
+        Session session = null;
+        try {
+            session = factory.openSession();
+            Query<Student> query = session.createQuery("from Student s where s.surname=:surname", Student.class);
+            query.setParameter("surname", student.getSurname());
+            return query.uniqueResult();
+        } catch (HibernateException exc) {
+            throw new DaoException("Exception in MySqlStudentDao object", exc);
+        } finally {
+            if (session!=null) {
+                session.close();
+            }
+        }
+    }
+
     // Modify the DB entry as per corresponding received object
     @Override
     public void update(Student student) throws DaoException {

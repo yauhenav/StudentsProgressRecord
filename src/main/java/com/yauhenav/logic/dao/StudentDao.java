@@ -13,6 +13,9 @@ public interface StudentDao {
     // Return the object corresponding to the DB entry with received primary 'key'
     Student read(Student student) throws DaoException;
 
+    // Return the object corresponding to the DB entry with received 'Surname' parameter
+    Student readBySurname (Student student) throws DaoException;
+
     // Modify the DB entry as per corresponding received object
     void update(Student student) throws DaoException;
 

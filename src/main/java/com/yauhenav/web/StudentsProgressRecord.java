@@ -32,6 +32,8 @@ public class StudentsProgressRecord extends HttpServlet {
                 case "Show student":
                     executeShowOneStudent(resp, sesMngObj, req, pw);
                     break;
+                case "Show student by surname":
+                    executeShowOneStudentBySurname(resp, sesMngObj, req, pw);
                 case "Add new student":
                     executeAddNewStudent(resp, pw, sesMngObj, req);
                     break;
@@ -119,6 +121,25 @@ public class StudentsProgressRecord extends HttpServlet {
         } else {
             pw.println("<font color=\"red\">You've entered invalid ID value, " +
                     "go back and enter a valid ID</font>");
+        }
+    }
+
+    /**
+     * Display one student by specifying their surnamme
+     */
+
+    private void executeShowOneStudentBySurname (HttpServletResponse resp, Service sesMngObj, HttpServletRequest req, PrintWriter pw) throws DaoException, ServiceException, IOException, ServletException {
+        String paramVal = req.getParameter("show_student_by_surname");
+        if (paramVal.matches("[A-Za-z]+")) {
+            Student student = new Student(-1, null, paramVal);
+            student = sesMngObj.displayOneStudentBySurname(student);
+            req.setAttribute("item", student);
+            req.setAttribute("message", "Here goes one student selected by surname");
+            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/single-result.jsp");
+            dispatcher.forward(req, resp);
+        } else {
+            pw.println("<font color=\"red\">You've entered invalid surname value, " +
+                    "go back and enter a valid surname</font>");
         }
     }
 
