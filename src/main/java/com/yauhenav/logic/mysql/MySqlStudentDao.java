@@ -153,5 +153,22 @@ public class MySqlStudentDao implements StudentDao {
             }
         }
     }
+
+    // Return a list of objects corresponding to DB entries containing combination of characters
+    public List<Student> getAllStudentsCombinationCharacters(String combination) throws DaoException {
+        Session session = null;
+        try {
+            session = factory.openSession();
+            Query query = session.createQuery("from Student s where surname like '"+combination+"%'");
+            List<Student> lst = query.list();
+            return lst;
+        } catch (HibernateException exc) {
+            throw new DaoException("Exception in MySqlStudentDao object", exc);
+        } finally {
+            if (session!=null) {
+                session.close();
+            }
+        }
+    }
 }
 
