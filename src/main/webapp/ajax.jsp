@@ -10,7 +10,7 @@
 <%
     PrintWriter pw = response.getWriter();
     String combination=request.getParameter("val");
-    if(combination==null||combination.trim().equals("")){
+    if(combination==null) {
         pw.print("<p>Please enter name!</p>");
     }else {
         try {
