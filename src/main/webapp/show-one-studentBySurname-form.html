@@ -1,34 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Show one student by surname form</title>
 
-    <script>
-        var request;
-        function sendInfo() {
-            var name=document.Form21.show_student_by_surname.value;
-            var url="ajax.jsp?val="+name;
+    <script type="text/javascript">
 
-            if (window.XMLHttpRequest) {
-                request= new XMLHttpRequest();
-            } else if (window.ActiveXObject) {
-                request = new ActiveXObject("Microsoft.XMLHTTP");
-            }
+        var name=document.Form21.show_student_by_surname.value;
+        var url="ajax.jsp?val="+name;
 
-            try{
-                request.onreadystatechange=getInfo;
-                request.open("GET",url,true);
-                request.send();
-            } catch(e){alert("Unable to connect to server");}
-        }
+        $(document).ready(function(){
 
-        function getInfo(){
-            if (request.readyState==4) {
-                var val=request.responseText;
-                document.getElementById("demo").innerHTML=val;
-            }
-        }
+            $("#field1").onkeyup(function(){
+                $("#field1").load(url);
+            })
+
+        });
+
     </script>
 
 </head>
@@ -40,7 +29,7 @@
     <table>
         <tr>
             <td><B>Enter student surname</B></td>
-            <td><input type=text name="show_student_by_surname" onkeyup="sendInfo()" size="25" value=""></td>
+            <td><input id="field1" type=text name="show_student_by_surname" onkeyup="sendInfo()" size="25" value=""></td>
         </tr>
     </table>
     <input type=submit name="action" value="Show student by surname">
